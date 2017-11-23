@@ -103,8 +103,3 @@ def get_logger(config_file=None):
 
     return logger
 
-
-os.environ["LOGSTASH_CONFIG"] = "../config.conf"
-if __name__ == "__main__":
-    logger = get_logger()
-    logger.info("HELLO")
