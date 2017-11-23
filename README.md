@@ -43,7 +43,7 @@ args=('elk.internal.com', 33333)
 export LOGSTASH_CONFIG=/path/to/config/file
 ```
 
-the logger can retrieved and used by calling the `get_logger()` method.
+the logger can be retrieved and used by calling the `get_logger()` method.
 
 ```python
 # logging_test.py
