@@ -29,6 +29,7 @@ setup(
         "License :: OSI Approved :: BSD License",
     ],
     install_requires=[
-    ]
+    ],
+    test_suite='tests'
 
 )
