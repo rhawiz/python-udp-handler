@@ -1,7 +1,10 @@
 import json
+import os
 import socket
-import logging.handlers
 from logging.handlers import SocketHandler
+import logging
+import logging.handlers
+import logging.config
 
 
 class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Handler
@@ -15,6 +18,7 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
     makeLogRecord function.
 
     """
+
     def __init__(self, host, port):
         """
         Initializes the handler with a specific host address and port.
@@ -66,3 +70,41 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
         d.pop('message', None)
         s = json.dumps(d)
         return s
+
+
+class UdpHandlerError(ValueError):
+    pass
+
+
+def get_logger(config_file=None):
+    """
+    Creates UDP handler logger. If config file is not passed in, will check for the path in environment variables.
+    If neither are passed, will raise UdpHandlerError.
+
+    :param config_file: Path to config file, defaults to None.
+    :return: logger
+    :rtype: logging.Logger
+    :raises UdpHandlerError
+    """
+
+    config_file = os.environ.get("LOGSTASH_CONFIG") if config_file is None else None
+
+    if config_file is None:
+        raise UdpHandlerError(
+            "No config file found. "
+            "Either pass the file into this method, or set environment variable LOGSTASH_CONFIG=/path/to/config")
+
+    if os.path.isfile(config_file) is False:
+        raise UdpHandlerError("'{}' config file does not exist.".format(config_file))
+
+    logging.config.fileConfig(config_file)
+
+    logger = logging.getLogger()
+
+    return logger
+
+
+os.environ["LOGSTASH_CONFIG"] = "../config.conf"
+if __name__ == "__main__":
+    logger = get_logger()
+    logger.info("HELLO")
