@@ -87,7 +87,8 @@ def get_logger(config_file=None):
     :raises UdpHandlerError
     """
 
-    config_file = os.environ.get("LOGSTASH_CONFIG") if config_file is None else None
+    if config_file is None:
+        config_file = os.environ.get("LOGSTASH_CONFIG", None)
 
     if config_file is None:
         raise UdpHandlerError(
@@ -102,4 +103,3 @@ def get_logger(config_file=None):
     logger = logging.getLogger()
 
     return logger
-
