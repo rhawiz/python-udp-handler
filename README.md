@@ -37,25 +37,33 @@ level=DEBUG
 args=('elk.internal.com', 33333)
 ```
 
-The path to the config file can be passed in as an environment variable
+[OPTIONAL] The path to the config file can be defined as an environment variable.
 
 ```
 export LOGSTASH_CONFIG=/path/to/config/file
 ```
 
-To log using the handler
+the logger can retrieved and used by calling the `get_logger()` method.
 
 ```python
 # logging_test.py
 
-import logging
-import logging.handlers
-import logging.config
+from logmodule import get_logger
 
-logging.config.fileConfig('config.conf')
-logger = logging.getLogger("root")
-logger.info("LOG MESSAGE")
+def main():
+    logger = get_logger()
+    logger.info("LOG MESSAGE")
 
+if __name__ == "__main__":
+    main()
+
+```
+
+
+If LOGSTASH_CONFIG env variable is not set, then the path to the configuration file must be passed inside the method
+
+```python
+logger = get_logger("/path/to/config/file")
 ```
 
 The script above will produce the following message to logstash
