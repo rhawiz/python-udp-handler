@@ -69,7 +69,6 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
         msg = d.get("msg", record.getMessage())
 
         d['msg'] = msg
-        d['msg_obj'] = msg
         d['args'] = None
         d['exc_info'] = None
         # Issue #25685: delete 'message' if present: redundant with 'msg'
