@@ -1,6 +1,7 @@
 import json
 import os
 import socket
+from json import JSONDecodeError
 from logging.handlers import SocketHandler
 import logging
 import logging.handlers
@@ -48,6 +49,7 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
         """
         if self.sock is None:
             self.createSocket()
+
         self.sock.sendto(bytearray(s, 'utf-8'), self.address)
 
     def makePickle(self, record):
@@ -63,12 +65,17 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
         # available on the receiving end. So we convert the msg % args
         # to a string, save it as msg and zap the args.
         d = dict(record.__dict__)
-        d['msg'] = record.getMessage()
+
+        msg = d.get("msg", record.getMessage())
+
+        d['msg'] = msg
+        d['msg_obj'] = msg
         d['args'] = None
         d['exc_info'] = None
         # Issue #25685: delete 'message' if present: redundant with 'msg'
         d.pop('message', None)
         s = json.dumps(d)
+
         return s
 
 
