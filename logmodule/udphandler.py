@@ -67,15 +67,12 @@ class UdpHandler(logging.handlers.DatagramHandler):  # Inherit from logging.Hand
         d = dict(record.__dict__)
 
         msg = d.get("msg", record.getMessage())
-
         d['msg'] = msg
-        d['msg_obj'] = msg
         d['args'] = None
         d['exc_info'] = None
         # Issue #25685: delete 'message' if present: redundant with 'msg'
         d.pop('message', None)
         s = json.dumps(d)
-
         return s
 
 
@@ -84,7 +81,7 @@ class UdpHandlerError(ValueError):
 
 
 def get_logger(config_file=None):
-    """
+    """c
     Creates UDP handler logger. If config file is not passed in, will check for the path in environment variables.
     If neither are passed, will raise UdpHandlerError.
 
